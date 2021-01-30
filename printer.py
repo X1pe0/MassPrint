@@ -20,11 +20,17 @@ def printit(num):
             print ('Worker: %s Printing on - %s'%(num,ips))
             response = os.system("ping -w 1 -c 1 " + str(ips) + " > /var/tmp/printme/ping.log")
             if response == 0:
-                stdout = subprocess.getoutput('echo "%s" | netcat -w 3 %s 9100'%(words,str(ips)))
+                stdout = subprocess.getoutput('echo "%s" | netcat -w 3 %s 9100'%(words,str(ips)))   #RAW
+                stdout = subprocess.getoutput('echo "%s" | netcat -w 1 %s 515'%(words,str(ips)))    #LPDSVC (accepts LPR)
+                stdout = subprocess.getoutput('echo "%s" | netcat -w 1 %s 616'%(words,str(ips)))    #Standard Port Monitor (using SNMP)
+                stdout = subprocess.getoutput('echo "%s" | netcat -w 1 %s 1023'%(words,str(ips)))   #Standard Port Monitor (using LPR)
+                stdout = subprocess.getoutput('echo "%s" | netcat -w 1 %s 2000'%(words,str(ips)))   #Standard Port Monitor (using RAW)
+                stdout = subprocess.getoutput('echo "%s" | netcat -w 1 %s 2501'%(words,str(ips)))   #Standard Port Monitor (using RAW)
+                stdout = subprocess.getoutput('echo "%s" | netcat -w 1 %s 2503'%(words,str(ips)))   #Standard Port Monitor (using RAW)
+                stdout = subprocess.getoutput('echo "%s" | netcat -w 1 %s 3001'%(words,str(ips)))   #Standard Port Monitor (using RAW)
+                stdout = subprocess.getoutput('echo "%s" | netcat -w 1 %s 6869'%(words,str(ips)))   #Standard Port Monitor (using RAW)
             else:
                 pass
-
-
 threads = []
 for i in range(thread_limit):
     t = threading.Thread(target=printit, args=(i,))
